@@ -1,0 +1,17 @@
+# Ignore configuration files containing sensitive information
+pelican.conf
+
+# Ignore virtual environments
+bmzenv/
+
+# Ignore Python bytecode files
+*.pyc
+*.pyo
+
+# Ignore IDE settings
+.vscode/
+.idea/
+
+# Ignore system-specific files
+.DS_Store
+Thumbs.db

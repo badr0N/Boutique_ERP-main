@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_boutique_sale_order_form_inherit_sale_view_order_form" model="ir.ui.view">
+        <field name="name">boutique.sale.order.form.inherit.sale.view.order.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='order_lines']/field[@name='order_line']/tree//field[@name='product_uom_qty']" position="before">
+                <field name="secondary_product_qty" groups="uom.group_uom" readonly="product_uom_readonly" optional="show"/>
+                <field name="secondary_product_uom_id" readonly="product_uom_readonly"  context="{'company_id': parent.company_id}" groups="uom.group_uom" options="{'no_open': True, 'no_create': True}" optional="show"/>
+            </xpath>
+            <xpath expr="//button[@id='create_invoice']" position="before">
+                <button name="action_create_delivery_order" 
+                    string="Create Delivery Order" class="oe_highlight" type="object" 
+                    invisible="state not in ('sale', 'done')" 
+                    data-hotkey="y"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

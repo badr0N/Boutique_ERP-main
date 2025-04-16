@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_stock_move_detail_package,stock.move.detail.package,model_stock_move_detail_package,,1,1,1,1
+access_stock_move_detail_package_line,stock.move.detail.package.line,model_stock_move_detail_package_line,,1,1,1,1
+access_stock_move_detail_package_wizard,stock.move.detail.package.wizard,model_stock_move_detail_package_wizard,,1,1,1,1
+access_stock_move_detail_package_wizard_line,stock.move.detail.package.wizard.line,model_stock_move_detail_package_wizard_line,,1,1,1,1

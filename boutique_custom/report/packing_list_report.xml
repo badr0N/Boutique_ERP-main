@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_boutique_packing_list_document">
+        <t t-foreach="docs" t-as="o">
+            <t t-call="web.html_container">
+                <t t-call="web.basic_layout">
+                    <div class="page">
+                        <table class="table table-sm o_main_table"
+                            style="width: 100%; border: 1px solid black;">
+                            <thead>
+                                <tr>
+                                    <th colspan="14" class="text-center">
+                                        <h2>PACKING LIST:ss
+                                            <t t-esc="o.partner_id.name" />
+                                        </h2>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th colspan="14" class="text-center">
+                                        <span><strong>Date:</strong>
+                                            <t t-esc="o.scheduled_date.strftime('%d/%m/%Y')" /></span>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th rowspan="2" style="vertical-align: middle;" class="text-right">ITEM</th>
+                                    <th colspan="10" class="text-center" style="vertical-align: middle;" >Qty</th>
+                                    <th rowspan="2" style="vertical-align: middle;" >TOTAL YDS</th>
+                                    <th rowspan="2" style="vertical-align: middle;" >TOTAL PCS</th>
+                                </tr>
+                                <tr>
+                                    <th>1</th>
+                                    <th>2</th>
+                                    <th>3</th>
+                                    <th>4</th>
+                                    <th>5</th>
+                                    <th>6</th>
+                                    <th>7</th>
+                                    <th>8</th>
+                                    <th>9</th>
+                                    <th>10</th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="total_quantity" t-value="0" />
+                                <t t-set="total_secondary_qty" t-value="0" />
+                                <t t-foreach="o.move_ids_without_package" t-as="move">
+                                    <t t-set="packages"
+                                        t-value="request.env['stock.move.detail.package'].search([('stock_move_id', '=', move.id)])" />
+                                    <t t-foreach="packages" t-as="package">
+                                        <t t-set="total_quantity" t-value="total_quantity + package.quantity" />
+                                        <t t-set="total_secondary_qty"
+                                            t-value="total_secondary_qty + package.secondary_qty" />
+                                        <tr>
+                                            <td>
+                                                <t t-esc="package.product_id.display_name" />
+                                            </td>
+                                            <t t-foreach="package.line_ids" t-as="line">
+                                                <td class="text-center">
+                                                    <t t-esc="line.quantity" />
+                                                </td>
+                                            </t>
+                                            <t t-if="len(package.line_ids) &lt; 10">
+                                                <t t-set="remaining" t-value="10 - len(package.line_ids)" />
+                                                <t t-foreach="range(remaining)" t-as="_">
+                                                    <td></td>
+                                                </t>
+                                            </t>
+                                            <td class="text-center">
+                                                <t t-esc="package.quantity" />
+                                            </td>
+                                            <td class="text-center">
+                                                <t t-esc="package.secondary_qty" />
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </t>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="11" class="text-center"><strong>GRAND TOTAL</strong></td>
+                                    <t t-foreach="o.move_ids_without_package" t-as="move">
+                                        <t t-set="packages"
+                                            t-value="request.env['stock.move.detail.package'].search([('stock_move_id', '=', move.id)])" />
+                                    </t>
+                                    <td class="text-center">
+                                        <t t-esc="total_quantity" />
+                                    </td>
+                                    <td class="text-center">
+                                        <t t-esc="total_secondary_qty" />
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        
+                        <div class="footer text-center">
+                            <small>
+                                <span>Page</span>
+                                <span class="page" /> / <span class="topage" />
+                            </small>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+
+
+    <record id="paper_format_boutique_packing_list" model="report.paperformat">
+        <field name="name">Paperformat Packing List</field>
+        <field name="default" eval="True" />
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Landscape</field>
+        <field name="margin_top">10</field>
+        <field name="margin_bottom">10</field>
+        <field name="margin_left">5</field>
+        <field name="margin_right">5</field>
+        <field name="header_line" eval="False" />
+        <field name="header_spacing">20</field>
+        <field name="dpi">80</field>
+    </record>
+
+    <record id="action_report_boutique_packing_list" model="ir.actions.report">
+        <field name="name">Packing List</field>
+        <field name="model">stock.picking</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">boutique_custom.report_boutique_packing_list_document</field>
+        <field name="report_file">boutique_custom.report_boutique_packing_list_document</field>
+        <field name="print_report_name">'Packing List'</field>
+        <field name="binding_model_id" ref="stock.model_stock_picking" />
+        <!-- <field name="binding_model_id" eval="False" /> -->
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="boutique_custom.paper_format_boutique_packing_list" />
+    </record>
+
+</odoo>

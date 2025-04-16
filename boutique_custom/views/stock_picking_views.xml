@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_boutique_stock_picking_form_inherit_stock_view_picking_form" model="ir.ui.view">
+        <field name="name">boutique.stock.picking.form.inherit.stock.view.picking.form</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook//field[@name='move_ids_without_package']/tree/field[@name='product_uom_qty']" position="before">
+                <field name="secondary_qty" optional="show" invisible="not secondary_product_uom" groups="uom.group_uom"/>
+                <field name="secondary_product_uom" readonly="state == 'done'" options="{'no_open': True, 'no_create': True}" string="Secondary Unit" groups="uom.group_uom" optional="show"/>
+            </xpath>
+            <xpath expr="//field[@name='partner_id']" position="before">
+                <field name="manual_purchase_id" invisible="1"/>
+                <field name="is_manual_create_picking" invisible="1"/>
+                <field name="sale_id" invisible="1"/>
+            </xpath>
+            <xpath expr="//notebook//field[@name='move_ids_without_package']/tree/field[@name='product_uom']" position="after">
+                <field name="price_unit" optional="show" groups="boutique_custom.group_kain_stock_picking_price_unit"/>
+                <field name="purchase_line_id"
+                    optional="hide"
+                    readonly="state == 'done'" column_invisible="1"
+                    domain="[('order_id', '=', parent.manual_purchase_id)]"
+                    options="{'no_open': True, 'no_create': True}"/>
+                <field name="sale_line_id" 
+                    optional="hide" 
+                    readonly="state == 'done'" column_invisible="1"
+                    domain="[('order_id', '=', parent.sale_id)]"
+                    options="{'no_open': True, 'no_create': True}"/>
+            </xpath>
+            <xpath expr="//notebook//field[@name='move_ids_without_package']/tree/button[@name='action_assign_serial']" position="before">
+                <button id="action_open_detail_packages" name="%(boutique_custom.action_view_detail_package_wizard)d" string="Open Detail Package"
+                    type="action" class="btn-primary" data-hotkey="c" icon="fa-cubes" invisible="not secondary_product_uom" groups="uom.group_uom"/>
+            </xpath>
+            <xpath expr="//page[@name='note']" position="before">
+                <page string="Expedition Notes" name="expedition_notes">
+                    <field name="expedition_note" string="Expedition Notes" placeholder="Expedition notes..."/>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

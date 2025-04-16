@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="group_kain_stock_picking_price_unit" model="res.groups">
+        <field name="name">Stock Picking Price Unit Access</field>
+    </record>
+
+</odoo>

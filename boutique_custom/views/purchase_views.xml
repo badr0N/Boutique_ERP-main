@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_boutique_purchase_order_form_inherit_purchase_purchase_order_form" model="ir.ui.view">
+        <field name="name">boutique.purchase.order.form.inherit.purchase.purchase.order.form</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='products']/field[@name='order_line']/tree//field[@name='product_qty']" position="before">
+                <field name="secondary_product_qty" groups="uom.group_uom" readonly="state in ('purchase', 'done', 'cancel')" optional="show"/>
+                <field name="secondary_product_uom_id" groups="uom.group_uom" readonly="state in ('purchase', 'done', 'cancel')" options="{'no_open': True, 'no_create': True}" force_save="1" optional="show"/>
+            </xpath>
+            <xpath expr="//header/button[@name='action_rfq_send']" position="after">
+                <button name="action_create_receipt" 
+                    string="Create Receipt" class="oe_highlight" type="object" 
+                    invisible="state not in ('purchase', 'done')" 
+                    data-hotkey="y"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_boutique_purchase_order_tree_inherit_purchase_purchase_history_tree" model="ir.ui.view">
+        <field name="name">boutique.purchase.order.tree.inherit.purchase.purchase.history.tree</field>
+        <field name="model">purchase.order.line</field>
+        <field name="inherit_id" ref="purchase.purchase_history_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_id']" position="after">
+                <field name="product_id"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
