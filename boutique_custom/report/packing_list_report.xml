@@ -10,7 +10,7 @@
                             <thead>
                                 <tr>
                                     <th colspan="14" class="text-center">
-                                        <h2>PACKING LIST:ss
+                                        <h2>PACKING LIST:test
                                             <t t-esc="o.partner_id.name" />
                                         </h2>
                                     </th>
